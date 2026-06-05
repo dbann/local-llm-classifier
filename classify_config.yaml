@@ -1,0 +1,25 @@
+# Edit this file, then run:
+#   python3 app.py --config classify_config.yaml
+
+input: data/input
+output_dir: data/output
+model: gemma3:270m
+base_url: http://localhost:11434
+question: "Does the following abstract make a policy claim? Answer yes or no."
+
+# The LLM only reviews text_field plus optional context_fields.
+# It does not see every field in each JSON record.
+id_field: scopus_id
+text_field: abstract
+context_fields: title
+
+concurrency: 2
+timeout: 120
+max_retries: 3
+checkpoint_every: 1
+
+# Set to a number for testing, for example 10. Leave blank to classify all.
+limit:
+
+# true reclassifies records even if output already exists.
+force: false

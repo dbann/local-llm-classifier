@@ -1,0 +1,12 @@
+data/*
+!data/.gitkeep
+!data/input/
+!data/output/
+data/input/*
+data/output/*
+!data/input/.gitkeep
+!data/output/.gitkeep
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.DS_Store
