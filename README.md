@@ -1,17 +1,29 @@
-# Local LLM text Classifier
+# Local LLM Text Classifier
 
-This project is a general local setup for classifying text with local LLMs. 
+This project is a general-purpose local workflow for classifying text with
+local LLMs.
 
-Useful eg in (sytematic) reviews, metascience, or coding of text.
+It is designed for applied data scientists who want to run and adapt a local
+classifier without changing application code. The easiest path is the notebook:
+open `classify_workbook.ipynb`, adjust the settings cell, preview your data, run
+a small sample, and then scale up.
 
-You can use multiple LLMs and check their speed / adjust concurrency setting before rolling across your entire sample. 
+It is useful for systematic or scoping reviews, metascience, survey response
+coding, document screening, metadata enrichment, or any other JSON dataset where
+each record contains text you want to label.
 
-The current implementation uses Ollama. 
+You can try different local models, compare their speed and output, and tune the
+concurrency setting before running the classifier across a full dataset.
+
+The current implementation uses Ollama.
 
 It reads JSON files from `data/input/`, sends the configured text field to a
 local model, and writes classified JSON files to `data/output/`.
 
-The default classifier question is:
+The examples below use abstracts and a yes/no policy-claim question, but these
+are defaults only. Change the configured fields and question for your own task.
+
+The default example question is:
 
 ```text
 Does the following abstract make a policy claim? Answer yes or no.
@@ -43,7 +55,7 @@ Put JSON files in `data/input/`.
 `data/` is listed in `.gitignore` so local datasets and generated classification
 outputs are not committed by default.
 
-The preferred input shape is a JSON array of records:
+The default example input shape is a JSON array of records:
 
 ```json
 [
@@ -56,11 +68,11 @@ The preferred input shape is a JSON array of records:
 ]
 ```
 
-By default, each record should have:
+By default, the example configuration uses:
 
 - `scopus_id`: used as the stable record ID
-- `abstract`: the field sent to the LLM for review
-- `title`: optional context sent alongside the abstract
+- `abstract`: the field sent to the LLM for classification
+- `title`: optional context sent alongside the text
 
 The script preserves all original fields in the output JSON, but it does not
 send every field to the LLM. Only `text_field` and `context_fields` are included
@@ -78,13 +90,18 @@ There are three ways to run the classifier:
 
 | Method | Best for | File or command |
 | --- | --- | --- |
-| Notebook workbook | Easy interactive use | `classify_workbook.ipynb` |
+| Notebook workbook | Interactive use without editing code | `classify_workbook.ipynb` |
 | Config file | Repeatable runs | `python3 app.py --config classify_config.yaml` |
 | Command line | Quick overrides | `python3 app.py --model gemma3:270m` |
 
+If you are exploring a dataset or comparing prompts and models, start with the
+notebook. The config file and command line are mainly useful once you know the
+settings you want to repeat.
+
 ## Notebook Workbook
 
-Open `classify_workbook.ipynb` in Jupyter. Edit the settings cell:
+Most users can work entirely inside `classify_workbook.ipynb`. Open it in
+Jupyter, edit the settings cell, and run the cells from top to bottom:
 
 ```python
 INPUT = "data/input"
@@ -100,7 +117,7 @@ LIMIT = None
 FORCE = False
 ```
 
-Then run the cells from top to bottom. The notebook can:
+The notebook can:
 
 - list installed Ollama models
 - preview the input JSON files
@@ -249,8 +266,8 @@ Benchmarks below were run locally on 2026-06-05 with Ollama at
 
 | Run | Records | Concurrency | Throughput | Approx time | Notes |
 | --- | ---: | ---: | ---: | ---: | --- |
-| Sample benchmark | 60 | 1 | 3.77 abstracts/s | 15.9 s | Temporary benchmark output |
-| Sample benchmark | 60 | 2 | 5.33 abstracts/s | 11.3 s | Temporary benchmark output |
+| Sample benchmark | 60 | 1 | 3.77 records/s | 15.9 s | Temporary benchmark output |
+| Sample benchmark | 60 | 2 | 5.33 records/s | 11.3 s | Temporary benchmark output |
 
 For the 60-record benchmark, `--concurrency 2` was about 1.4x faster than
 `--concurrency 1`.
