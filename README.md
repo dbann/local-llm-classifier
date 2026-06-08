@@ -9,7 +9,7 @@ open `classify_workbook.ipynb`, adjust the settings cell, preview your data, run
 a small sample, and then scale up.
 
 It is useful for systematic or scoping reviews, metascience, survey response
-coding, document screening, metadata enrichment, or any other JSON dataset where
+coding, document screening, metadata enrichment, or any other text dataset where
 each record contains text you want to label.
 
 You can try different local models, compare their speed and output, and tune the
