@@ -1,7 +1,12 @@
-# Local LLM Abstract Classifier
+# Local LLM text Classifier
 
-This project is a general local setup for classifying text with a local LLM. The
-current implementation uses Ollama.
+This project is a general local setup for classifying text with local LLMs. 
+
+Useful eg in (sytematic) reviews, metascience, or coding of text.
+
+You can use multiple LLMs and check their speed / adjust concurrency setting before rolling across your entire sample. 
+
+The current implementation uses Ollama. 
 
 It reads JSON files from `data/input/`, sends the configured text field to a
 local model, and writes classified JSON files to `data/output/`.
